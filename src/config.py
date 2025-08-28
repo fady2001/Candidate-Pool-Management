@@ -28,6 +28,10 @@ class Settings(BaseModel):
     API_HOST: str = "localhost"
     API_PORT: int = 8000
 
+    # Gemini model settings
+    GEMINI_MODEL: str = "gemini-2.5-flash"
+    GEMINI_TEMPERATURE: float = 0.1
+
 
 # Global settings instance
 settings = Settings()

@@ -1,8 +1,7 @@
-import json
-from typing import Tuple
-
+from langchain_core.output_parsers import PydanticOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 
+from config import settings
 from src.models import CVData, JobData
 from src.prompts import CV_PARSING_SYSTEM_PROMPT, JOB_DESCRIPTION_PARSING_SYSTEM_PROMPT
 from src.utils import (
@@ -12,16 +11,22 @@ from src.utils import (
 )
 
 
-class GeminiCVParser:
+class GeminiParser:
     """CV Parser using Google Gemini model"""
 
-    def __init__(self, model, temperature, parser):
+    def __init__(
+        self,
+        parser: PydanticOutputParser,
+        model: str = settings.GEMINI_MODEL,
+        temperature: float = settings.GEMINI_TEMPERATURE,
+    ) -> None:
         self.llm = get_llm(model=model, temperature=temperature)
-        self.parser = parser
+        self.parser: PydanticOutputParser = parser
 
-    def parse_cv(self, cv_path: str, file_type_extension: Tuple[str, str]) -> CVData:
+    def parse_cv(self, cv_path: str) -> CVData:
         """Parse a signle cv file document or image"""
         try:
+            file_type_extension = get_file_type_extension(cv_path)
             file_based64 = encode_file_to_base64(cv_path)
             prompt_template = ChatPromptTemplate(
                 [
@@ -53,9 +58,10 @@ class GeminiCVParser:
             print(f"Error parsing {file_type_extension[0]} {cv_path}: {e}")
             return None
 
-    def parse_job_description(self, jd_path: str, file_type_extension: Tuple[str, str]) -> JobData:
+    def parse_job_description(self, jd_path: str) -> JobData:
         """Parse a job description text and extract structured information"""
         try:
+            file_type_extension = get_file_type_extension(jd_path)
             file_based64 = encode_file_to_base64(jd_path)
             prompt_template = ChatPromptTemplate(
                 [
@@ -87,38 +93,3 @@ class GeminiCVParser:
         except Exception as e:
             print(f"Error parsing job description: {e}")
             return None
-
-
-if __name__ == "__main__":
-    from langchain_core.output_parsers import PydanticOutputParser
-
-    # CV Parser
-    # cv_parser = GeminiCVParser(
-    #     model="gemini-2.5-flash",
-    #     temperature=0.1,
-    #     parser=PydanticOutputParser(pydantic_object=CVData),
-    # )
-
-    # # Job Description Parser
-    # jd_parser = GeminiCVParser(
-    #     model="gemini-2.5-flash",
-    #     temperature=0.1,
-    #     parser=PydanticOutputParser(pydantic_object=JobData),
-    # )
-
-    # Test with a sample PDF CV
-    # sample_pdf = r"""E:\ITI Data science\Candidate-Pool-Management\data\raw\cvs\Ahmed Tamawe -Data Engineer B1 or B2.pdf"""
-    # cv_data = cv_parser.parse_cv(sample_pdf, get_file_type_extension(sample_pdf))
-    # if cv_data:
-    #     print("CV Parsing Result:")
-    #     print(json.dumps(cv_data.dict(), indent=4))
-    # else:
-    #     print("Failed to parse CV.")
-    # sample_jd = r"""E:\ITI Data science\Candidate-Pool-Management\data\raw\Job Descriptions\Job-Description---Data-Engineer-Sample.pdf"""
-    # jd_data = jd_parser.parse_job_description(sample_jd, get_file_type_extension(sample_jd))
-    # if jd_data:
-    #     print("\n" + "=" * 50)
-    #     print("Job Description Parsing Result:")
-    #     print(json.dumps(jd_data.dict(), indent=4))
-    # else:
-    #     print("Failed to parse job description.")

@@ -91,3 +91,84 @@ class CVData(BaseModel):
     )
     current_position: Optional[str] = Field(description="Current job title")
     current_company: Optional[str] = Field(description="Current company")
+
+
+class JobRequirement(BaseModel):
+    """Job requirement model"""
+    
+    category: Optional[str] = Field(description="Requirement category (e.g., Technical, Educational, Experience)")
+    requirements: List[str] = Field(default=[], description="List of specific requirements")
+    level: Optional[str] = Field(description="Required level (e.g., Beginner, Intermediate, Advanced, Expert)")
+
+
+class CompanyInfo(BaseModel):
+    """Company information model"""
+    
+    name: Optional[str] = Field(description="Company name")
+    industry: Optional[str] = Field(description="Industry sector")
+    size: Optional[str] = Field(description="Company size (e.g., Startup, Small, Medium, Large, Enterprise)")
+    location: Optional[str] = Field(description="Company location or headquarters")
+    website: Optional[str] = Field(description="Company website URL")
+    description: Optional[str] = Field(description="Brief company description")
+
+
+class SalaryInfo(BaseModel):
+    """Salary and compensation information model"""
+    
+    min_salary: Optional[int] = Field(description="Minimum salary amount")
+    max_salary: Optional[int] = Field(description="Maximum salary amount")
+    currency: Optional[str] = Field(description="Currency code (e.g., USD, EUR, GBP)")
+    period: Optional[str] = Field(description="Salary period (e.g., annually, monthly, hourly)")
+    benefits: List[str] = Field(default=[], description="Additional benefits and perks")
+
+
+class JobData(BaseModel):
+    """Complete job description data structure"""
+    
+    # Job Basic Information
+    job_title: Optional[str] = Field(description="Job title or position name")
+    job_id: Optional[str] = Field(description="Job posting ID or reference number")
+    department: Optional[str] = Field(description="Department or team")
+    employment_type: Optional[str] = Field(description="Employment type (e.g., Full-time, Part-time, Contract, Freelance)")
+    work_arrangement: Optional[str] = Field(description="Work arrangement (e.g., Remote, Hybrid, On-site)")
+    location: Optional[str] = Field(description="Job location")
+    
+    # Company Information
+    company: Optional[CompanyInfo] = Field(description="Company details")
+    
+    # Job Description
+    job_summary: Optional[str] = Field(description="Brief job summary or overview")
+    job_description: Optional[str] = Field(description="Detailed job description")
+    responsibilities: List[str] = Field(default=[], description="Key responsibilities and duties")
+    
+    # Requirements and Qualifications
+    required_skills: List[JobRequirement] = Field(default=[], description="Required skills categorized by type")
+    preferred_skills: List[JobRequirement] = Field(default=[], description="Preferred/nice-to-have skills")
+    education_requirements: List[str] = Field(default=[], description="Educational requirements")
+    experience_requirements: List[str] = Field(default=[], description="Experience requirements")
+    certifications_required: List[str] = Field(default=[], description="Required certifications")
+    certifications_preferred: List[str] = Field(default=[], description="Preferred certifications")
+    languages_required: List[Language] = Field(default=[], description="Required language skills")
+    
+    # Compensation and Benefits
+    salary_info: Optional[SalaryInfo] = Field(description="Salary and compensation details")
+    
+    # Application Information
+    application_deadline: Optional[str] = Field(description="Application deadline date")
+    application_process: Optional[str] = Field(description="How to apply or application process")
+    contact_email: Optional[str] = Field(description="Contact email for applications or inquiries")
+    contact_person: Optional[str] = Field(description="Contact person name")
+    
+    # Additional Information
+    travel_requirements: Optional[str] = Field(description="Travel requirements if any")
+    security_clearance: Optional[str] = Field(description="Security clearance requirements")
+    visa_sponsorship: Optional[bool] = Field(description="Whether visa sponsorship is available")
+    diversity_statement: Optional[str] = Field(description="Company diversity and inclusion statement")
+    
+    # Metadata
+    posted_date: Optional[str] = Field(description="Job posting date")
+    last_updated: Optional[str] = Field(description="Last updated date")
+    urgency_level: Optional[str] = Field(description="Urgency level (e.g., Urgent, Normal, Low)")
+    seniority_level: Optional[str] = Field(description="Seniority level (e.g., Entry-level, Mid-level, Senior, Executive)")
+    min_years_experience: Optional[int] = Field(description="Minimum years of experience required")
+    max_years_experience: Optional[int] = Field(description="Maximum years of experience preferred")

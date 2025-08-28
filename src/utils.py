@@ -33,9 +33,9 @@ def encode_file_to_base64(file_path: str) -> str:
 def get_file_type_extension(file_path: str) -> Tuple[str, str]:
     """Determine file type based on extension"""
     extension = Path(file_path).suffix.lower()
-    if extension == settings.SUPPORTED_CV_FORMATS["documents"]:
-        return "file", extension[1:]
+    if extension in settings.SUPPORTED_CV_FORMATS["documents"]:
+        return "file", "application/pdf"
     elif extension in settings.SUPPORTED_CV_FORMATS["images"]:
-        return "image", extension[1:]
+        return "image", f"image/{extension[1:]}"
     else:
-        return "unknown"
+        return "unknown", "unknown"

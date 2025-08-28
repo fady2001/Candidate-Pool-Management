@@ -3,8 +3,8 @@ from typing import Tuple
 
 from langchain_core.prompts import ChatPromptTemplate
 
-from src.models import CVData
-from src.prompts import CV_PARSING_SYSTEM_PROMPT
+from src.models import CVData, JobData
+from src.prompts import CV_PARSING_SYSTEM_PROMPT, JOB_DESCRIPTION_PARSING_SYSTEM_PROMPT
 from src.utils import (
     encode_file_to_base64,
     get_file_type_extension,
@@ -31,13 +31,13 @@ class GeminiCVParser:
                         [
                             {
                                 "type": "text",
-                                "text": f"Please analyze this {file_type_extension[2]} CV and extract all information according to the structured format provided in the system message.",
+                                "text": "Please analyze this CV and extract all information according to the structured format provided in the system message.",
                             },
                             {
-                                "type": file_type_extension[0],
+                                "type": "media",
                                 "source_type": "base64",
                                 "data": file_based64,
-                                "mime_type": f"application/{file_type_extension[1]}",
+                                "mime_type": file_type_extension[1],
                             },
                         ],
                     ),
@@ -53,22 +53,72 @@ class GeminiCVParser:
             print(f"Error parsing {file_type_extension[0]} {cv_path}: {e}")
             return None
 
+    def parse_job_description(self, jd_path: str, file_type_extension: Tuple[str, str]) -> JobData:
+        """Parse a job description text and extract structured information"""
+        try:
+            file_based64 = encode_file_to_base64(jd_path)
+            prompt_template = ChatPromptTemplate(
+                [
+                    ("system", JOB_DESCRIPTION_PARSING_SYSTEM_PROMPT),
+                    (
+                        "human",
+                        [
+                            {
+                                "type": "text",
+                                "text": "Please analyze this job description document and extract all information according to the structured format provided in the system message.",
+                            },
+                            {
+                                "type": "media",
+                                "source_type": "base64",
+                                "data": file_based64,
+                                "mime_type": file_type_extension[1],
+                            },
+                        ],
+                    ),
+                ]
+            )
+
+            prompt_messages = prompt_template.invoke(
+                {"format_instructions": self.parser.get_format_instructions()}
+            )
+            parsed_data = self.llm.with_structured_output(JobData).invoke(prompt_messages)
+            return parsed_data
+
+        except Exception as e:
+            print(f"Error parsing job description: {e}")
+            return None
+
 
 if __name__ == "__main__":
     from langchain_core.output_parsers import PydanticOutputParser
 
-    parser = GeminiCVParser(
-        model="gemini-2.5-flash",
-        temperature=0.1,
-        parser=PydanticOutputParser(pydantic_object=CVData),
-    )
+    # CV Parser
+    # cv_parser = GeminiCVParser(
+    #     model="gemini-2.5-flash",
+    #     temperature=0.1,
+    #     parser=PydanticOutputParser(pydantic_object=CVData),
+    # )
+
+    # # Job Description Parser
+    # jd_parser = GeminiCVParser(
+    #     model="gemini-2.5-flash",
+    #     temperature=0.1,
+    #     parser=PydanticOutputParser(pydantic_object=JobData),
+    # )
 
     # Test with a sample PDF CV
-    sample_pdf = (
-        r"""E:\ITI Data science\Candidate-Pool-Management\data\raw\cvs\fiona_lin_resume.jpeg"""
-    )
-    cv_data = parser.parse_cv(sample_pdf, get_file_type_extension(sample_pdf))
-    if cv_data:
-        print(json.dumps(cv_data.dict(), indent=4))
-    else:
-        print("Failed to parse CV.")
+    # sample_pdf = r"""E:\ITI Data science\Candidate-Pool-Management\data\raw\cvs\Ahmed Tamawe -Data Engineer B1 or B2.pdf"""
+    # cv_data = cv_parser.parse_cv(sample_pdf, get_file_type_extension(sample_pdf))
+    # if cv_data:
+    #     print("CV Parsing Result:")
+    #     print(json.dumps(cv_data.dict(), indent=4))
+    # else:
+    #     print("Failed to parse CV.")
+    # sample_jd = r"""E:\ITI Data science\Candidate-Pool-Management\data\raw\Job Descriptions\Job-Description---Data-Engineer-Sample.pdf"""
+    # jd_data = jd_parser.parse_job_description(sample_jd, get_file_type_extension(sample_jd))
+    # if jd_data:
+    #     print("\n" + "=" * 50)
+    #     print("Job Description Parsing Result:")
+    #     print(json.dumps(jd_data.dict(), indent=4))
+    # else:
+    #     print("Failed to parse job description.")

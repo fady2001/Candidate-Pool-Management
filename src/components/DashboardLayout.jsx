@@ -6,7 +6,8 @@ import Toolbar from "@mui/material/Toolbar";
 import { Outlet } from "react-router";
 import DashboardHeader from "./DashboardHeader";
 import DashboardSidebar from "./DashboardSidebar";
-import SitemarkIcon from "./SitemarkIcon";
+// import { ReactComponent as EFGLogo } from "../assets/EFGlogo.svg";
+import EFGLogo from "../assets/EFGlogo.svg";
 
 export default function DashboardLayout() {
   const theme = useTheme();
@@ -58,7 +59,17 @@ export default function DashboardLayout() {
       }}
     >
       <DashboardHeader
-        logo={<SitemarkIcon />}
+        logo={
+          <img
+            src={EFGLogo}
+            alt="EFG Logo"
+            style={{
+              height: "30px",
+              width: "auto",
+              padding: "5px 0px 0px 10px",
+            }}
+          />
+        }
         title=""
         menuOpen={isNavigationExpanded}
         onToggleMenu={handleToggleHeaderMenu}

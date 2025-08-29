@@ -42,7 +42,7 @@ class BatchProcessor:
 
     def process_cv_files(
         self,
-        file_paths: List[str],
+        file_paths: List[Path],
         batch_size: Optional[int] = None,
         max_size_mb: Optional[int] = None,
         save_results: bool = True,
@@ -132,7 +132,7 @@ class BatchProcessor:
 
     def process_job_files(
         self,
-        file_paths: List[str],
+        file_paths: List[Path],
         batch_size: Optional[int] = None,
         max_size_mb: Optional[int] = None,
         save_results: bool = True,
@@ -170,7 +170,6 @@ class BatchProcessor:
         if not supported_files:
             logger.error("No supported files to process")
             return self._create_empty_stats(session_id, session_start_time, "Job")
-
         batches = create_batches(supported_files, batch_size, max_size_mb)
         logger.info(f"Created {len(batches)} batches for processing")
 
@@ -220,7 +219,7 @@ class BatchProcessor:
 
         return stats
 
-    def _process_cv_batch_with_retry(self, batch_files: List[str]) -> CVBatchData:
+    def _process_cv_batch_with_retry(self, batch_files: List[Path]) -> CVBatchData:
         """Process a CV batch with retry logic"""
         last_exception = None
 
@@ -243,7 +242,7 @@ class BatchProcessor:
             "failed_batch", len(batch_files), time.time(), str(last_exception)
         )
 
-    def _process_job_batch_with_retry(self, batch_files: List[str]) -> JobBatchData:
+    def _process_job_batch_with_retry(self, batch_files: List[Path]) -> JobBatchData:
         """Process a Job batch with retry logic"""
         last_exception = None
 

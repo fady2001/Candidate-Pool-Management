@@ -1,3 +1,4 @@
+from pathlib import Path
 import time
 from typing import List
 
@@ -35,7 +36,7 @@ class GeminiParser:
         self.llm = get_llm(model=model, temperature=temperature)
         self.parser: PydanticOutputParser = parser
 
-    def parse_cv_batch(self, cv_paths: List[str]) -> CVBatchData:
+    def parse_cv_batch(self, cv_paths: List[Path]) -> CVBatchData:
         """Parse multiple CV files in a single batch request"""
         batch_start_time = time.time()
         batch_id = generate_batch_id()
@@ -178,7 +179,7 @@ class GeminiParser:
             results=results,
         )
 
-    def parse_job_batch(self, jd_paths: List[str]) -> JobBatchData:
+    def parse_job_batch(self, jd_paths: List[Path]) -> JobBatchData:
         """Parse multiple job description files in a single batch request"""
         batch_start_time = time.time()
         batch_id = generate_batch_id()

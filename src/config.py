@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import List
 
+from loguru import logger
 from pydantic import BaseModel
 
 
@@ -42,3 +43,11 @@ class Settings(BaseModel):
 
 # Global settings instance
 settings = Settings()
+
+# logger configuration
+logger.remove()
+logger.add(
+    lambda msg: print(f"[LOG] {msg}", end=""),
+    format="{time:HH:mm:ss} | {level} | {message}",
+    level=settings.LOG_LEVEL,
+)

@@ -31,31 +31,31 @@ def encode_file_to_base64(file_path: str) -> str:
     return encoded_string
 
 
-def get_file_type_extension(file_path: str) -> Tuple[str, str]:
+def get_file_type_extension(file_path: Path) -> Tuple[str, str]:
     """Determine file type based on extension"""
-    extension = Path(file_path).suffix.lower()
+    extension = file_path.suffix.lower()
     if extension in settings.SUPPORTED_CV_FORMATS["documents"]:
         return "file", "application/pdf"
     elif extension in settings.SUPPORTED_CV_FORMATS["images"]:
-        return "image", f"image/{extension[1:]}"
+        return "image", "image/jpeg"
     else:
         return "unknown", "unknown"
 
 
-def get_file_size(file_path: str) -> int:
+def get_file_size(file_path: Path) -> int:
     """Get file size in bytes"""
     return os.path.getsize(file_path)
 
 
-def create_file_info(file_path: str) -> FileInfo:
+def create_file_info(file_path: Path) -> FileInfo:
     """Create FileInfo object for a given file"""
     file_type, mime_type = get_file_type_extension(file_path)
     file_size = get_file_size(file_path)
     base64_content = encode_file_to_base64(file_path)
 
     return FileInfo(
-        file_path=file_path,
-        file_name=Path(file_path).name,
+        file_path=str(file_path),
+        file_name=file_path.name,
         file_type=file_type,
         mime_type=mime_type,
         file_size_bytes=file_size,
@@ -64,8 +64,8 @@ def create_file_info(file_path: str) -> FileInfo:
 
 
 def create_batches(
-    file_paths: List[str], batch_size: int, max_size_mb: int = None
-) -> List[List[str]]:
+    file_paths: List[Path], batch_size: int, max_size_mb: int = None
+) -> List[List[Path]]:
     """
     Create batches of files based on batch size and optional maximum total size per batch.
 
@@ -80,8 +80,8 @@ def create_batches(
     if not file_paths:
         return []
 
-    batches = []
-    current_batch = []
+    batches: List[List[Path]] = []
+    current_batch: List[Path] = []
     current_batch_size_bytes = 0
     max_size_bytes = max_size_mb * 1024 * 1024 if max_size_mb else float("inf")
 
@@ -129,7 +129,7 @@ def calculate_success_rate(successful: int, total: int) -> float:
     return (successful / total) * 100.0
 
 
-def filter_supported_files(file_paths: List[str]) -> List[str]:
+def filter_supported_files(file_paths: List[Path]) -> List[Path]:
     """Filter out unsupported file types"""
     supported_files = []
 
@@ -138,6 +138,6 @@ def filter_supported_files(file_paths: List[str]) -> List[str]:
         if file_type != "unknown":
             supported_files.append(file_path)
         else:
-            logger.warning(f"Skipping unsupported file: {file_path}")
+            logger.warning(f"Skipping unsupported file: {file_path.name}")
 
     return supported_files

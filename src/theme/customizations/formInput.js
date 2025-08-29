@@ -6,7 +6,6 @@ import { formHelperTextClasses } from '@mui/material/FormHelperText';
 import { iconButtonClasses } from '@mui/material/IconButton';
 import { brand } from '../themePrimitives';
 
-/* eslint-disable import/prefer-default-export */
 export const formInputCustomizations = {
   MuiFormControl: {
     styleOverrides: {

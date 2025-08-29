@@ -20,6 +20,13 @@ class Settings(BaseModel):
     CV_DIRECTORY: Path = RAW_DATA_DIR / "cvs"
     JOB_DESCRIPTIONS_DIR: Path = RAW_DATA_DIR / "Job Descriptions"
 
+    # Batch processing configuration
+    BATCH_SIZE_CV: int = 3
+    BATCH_SIZE_JOB: int = 2
+    MAX_FILE_SIZE_MB: int = 20
+    BATCH_RETRY_ATTEMPTS: int = 3
+    BATCH_DELAY_SECONDS: float = 1.0
+
     # Logging configuration
     LOG_LEVEL: str = "INFO"
     LOG_FILE: Path = PROJECT_ROOT / "logs" / "app.log"

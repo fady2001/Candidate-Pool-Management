@@ -1,12 +1,12 @@
-import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import { Outlet } from 'react-router';
-import DashboardHeader from './DashboardHeader';
-import DashboardSidebar from './DashboardSidebar';
-import SitemarkIcon from './SitemarkIcon';
+import * as React from "react";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import { Outlet } from "react-router";
+import DashboardHeader from "./DashboardHeader";
+import DashboardSidebar from "./DashboardSidebar";
+import SitemarkIcon from "./SitemarkIcon";
 
 export default function DashboardLayout() {
   const theme = useTheme();
@@ -16,7 +16,7 @@ export default function DashboardLayout() {
   const [isMobileNavigationExpanded, setIsMobileNavigationExpanded] =
     React.useState(false);
 
-  const isOverMdViewport = useMediaQuery(theme.breakpoints.up('md'));
+  const isOverMdViewport = useMediaQuery(theme.breakpoints.up("md"));
 
   const isNavigationExpanded = isOverMdViewport
     ? isDesktopNavigationExpanded
@@ -34,14 +34,14 @@ export default function DashboardLayout() {
       isOverMdViewport,
       setIsDesktopNavigationExpanded,
       setIsMobileNavigationExpanded,
-    ],
+    ]
   );
 
   const handleToggleHeaderMenu = React.useCallback(
     (isExpanded) => {
       setIsNavigationExpanded(isExpanded);
     },
-    [setIsNavigationExpanded],
+    [setIsNavigationExpanded]
   );
 
   const layoutRef = React.useRef(null);
@@ -50,11 +50,11 @@ export default function DashboardLayout() {
     <Box
       ref={layoutRef}
       sx={{
-        position: 'relative',
-        display: 'flex',
-        overflow: 'hidden',
-        height: '100%',
-        width: '100%',
+        position: "relative",
+        display: "flex",
+        overflow: "hidden",
+        height: "100vh",
+        width: "100%",
       }}
     >
       <DashboardHeader
@@ -70,20 +70,20 @@ export default function DashboardLayout() {
       />
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
+          display: "flex",
+          flexDirection: "column",
           flex: 1,
           minWidth: 0,
         }}
       >
-        <Toolbar sx={{ displayPrint: 'none' }} />
+        <Toolbar sx={{ displayPrint: "none" }} />
         <Box
           component="main"
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
+            display: "flex",
+            flexDirection: "column",
             flex: 1,
-            overflow: 'auto',
+            overflow: "auto",
           }}
         >
           <Outlet />

@@ -1,3 +1,4 @@
+from datetime import datetime
 from pathlib import Path
 from typing import List
 
@@ -12,6 +13,7 @@ class Settings(BaseModel):
     PROCESSED_DATA_DIR: Path = DATA_DIR / "processed"
     MODELS_DIR: Path = PROJECT_ROOT / "models"
     REPORTS_DIR: Path = PROJECT_ROOT / "reports"
+    LOGS_DIR: Path = PROJECT_ROOT / "logs"
 
     SUPPORTED_CV_FORMATS: List[str] = {
         "images": [".png", ".jpg", ".jpeg"],
@@ -44,10 +46,26 @@ class Settings(BaseModel):
 # Global settings instance
 settings = Settings()
 
-# logger configuration
+settings.LOGS_DIR.mkdir(exist_ok=True)
+
+timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+log_filename = f"app_{timestamp}.log"
+log_filepath = settings.LOGS_DIR / log_filename
+
+# remove default logger
 logger.remove()
+
+# configure logger to log to console and file
 logger.add(
     lambda msg: print(f"[LOG] {msg}", end=""),
     format="{time:HH:mm:ss} | {level} | {message}",
     level=settings.LOG_LEVEL,
+)
+logger.add(
+    log_filepath,
+    format="{time:YYYY-MM-DD HH:mm:ss.SSS} | {level: <8} | {name}:{function}:{line} | {message}",
+    level=settings.LOG_LEVEL,
+    rotation="10 MB",
+    retention="30 days",
+    compression="zip",
 )

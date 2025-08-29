@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 from typing import List
 
@@ -40,7 +39,7 @@ def cvs_main():
         logger.info(f"    {i + 1}. {file.name}")
 
     # 3. Process the files in batches
-    logger.info(f"\nProcessing with batch size: {settings.BATCH_SIZE_CV}")
+    logger.info(f"Processing with batch size: {settings.BATCH_SIZE_CV}")
     stats = batch_processor.process_cv_files(
         file_paths=cv_files,
         batch_size=4,
@@ -49,7 +48,7 @@ def cvs_main():
     )
 
     # Display results
-    logger.info("\nProcessing completed!")
+    logger.info("Processing completed!")
     logger.info(f"Session ID: {stats.session_id}")
     logger.info(f"Total batches: {stats.total_batches}")
     logger.info(f"Total files: {stats.total_files}")
@@ -96,7 +95,7 @@ def jd_main():
         logger.info(f"    {i + 1}. {file.name}")
 
     # 3. Process the files in batches
-    logger.info(f"\nProcessing with batch size: {settings.BATCH_SIZE_JOB}")
+    logger.info(f"Processing with batch size: {settings.BATCH_SIZE_JOB}")
     stats = batch_processor.process_job_files(
         file_paths=job_files,
         batch_size=2,
@@ -105,7 +104,7 @@ def jd_main():
     )
 
     # Display results
-    logger.info("\nProcessing completed!")
+    logger.info("Processing completed!")
     logger.info(f"Session ID: {stats.session_id}")
     logger.info(f"Total batches: {stats.total_batches}")
     logger.info(f"Total files: {stats.total_files}")

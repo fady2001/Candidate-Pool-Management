@@ -50,7 +50,7 @@ def cvs_main():
 
     function_results = batch_processor.process_cv_files(
         file_paths=cv_files,
-        batch_size=4,
+        batch_size=settings.BATCH_SIZE_CV,
         max_size_mb=settings.MAX_FILE_SIZE_MB,
     )
     stats: BatchProcessingStats = function_results[0]
@@ -83,7 +83,7 @@ def cvs_main():
     # Data has already been saved above in the batch processing loop
 
 
-def jd_main():
+def jds_main():
     """
     |---------------------------------------------------------------------------|
     |                     information extraction from files                     |
@@ -118,7 +118,7 @@ def jd_main():
     logger.info(f"Processing with batch size: {settings.BATCH_SIZE_JOB}")
     function_results = batch_processor.process_job_files(
         file_paths=job_files,
-        batch_size=2,
+        batch_size=settings.BATCH_SIZE_JOB,
         max_size_mb=settings.MAX_FILE_SIZE_MB,
     )
 
@@ -152,4 +152,4 @@ def jd_main():
 
 
 if __name__ == "__main__":
-    jd_main()
+    jds_main()

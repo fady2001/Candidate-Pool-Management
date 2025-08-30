@@ -21,7 +21,7 @@ class Settings(BaseModel):
         "documents": [".pdf", ".docx", ".doc"],
         "all": [".png", ".jpg", ".jpeg", ".pdf", ".docx", ".doc"],
     }
-    CV_DIRECTORY: Path = INTERIM_DATA_DIR / "cvs"
+    CV_DIRECTORY: Path = RAW_DATA_DIR / "cvs"
     JOB_DESCRIPTIONS_DIR: Path = RAW_DATA_DIR / "Job Descriptions"
 
     # Batch processing configuration

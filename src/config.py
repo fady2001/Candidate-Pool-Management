@@ -30,6 +30,12 @@ class Settings(BaseModel):
     BATCH_RETRY_ATTEMPTS: int = 3
     BATCH_DELAY_SECONDS: float = 1.0
 
+    # Database configuration
+    DATABASE_NAME: str = "candidate_pool.db"
+    DATABASE_DIR: str = f"{DATA_DIR}/{DATABASE_NAME}"
+    DATABASE_URL: str = f"sqlite:///{DATABASE_DIR}"
+    DATABASE_TIMEOUT: int = 30
+
     # Logging configuration
     LOG_LEVEL: str = "INFO"
     LOG_FILE: Path = PROJECT_ROOT / "logs" / "app.log"

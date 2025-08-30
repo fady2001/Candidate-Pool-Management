@@ -11,6 +11,7 @@ class Settings(BaseModel):
     DATA_DIR: Path = PROJECT_ROOT / "data"
     RAW_DATA_DIR: Path = DATA_DIR / "raw"
     PROCESSED_DATA_DIR: Path = DATA_DIR / "processed"
+    INTERIM_DATA_DIR: Path = DATA_DIR / "interim"
     MODELS_DIR: Path = PROJECT_ROOT / "models"
     REPORTS_DIR: Path = PROJECT_ROOT / "reports"
     LOGS_DIR: Path = PROJECT_ROOT / "logs"
@@ -30,6 +31,12 @@ class Settings(BaseModel):
     BATCH_RETRY_ATTEMPTS: int = 3
     BATCH_DELAY_SECONDS: float = 1.0
 
+    # Database configuration
+    DATABASE_NAME: str = "candidate_pool.db"
+    DATABASE_DIR: str = f"{DATA_DIR}/{DATABASE_NAME}"
+    DATABASE_URL: str = f"sqlite:///{DATABASE_DIR}"
+    DATABASE_TIMEOUT: int = 30
+
     # Logging configuration
     LOG_LEVEL: str = "INFO"
     LOG_FILE: Path = PROJECT_ROOT / "logs" / "app.log"
@@ -41,6 +48,10 @@ class Settings(BaseModel):
     # Gemini model settings
     GEMINI_MODEL: str = "gemini-2.5-flash"
     GEMINI_TEMPERATURE: float = 0.1
+    
+    # saving cv or jd result
+    SAVE_INTO_JSON:bool = False
+    SAVE_INTO_DB:bool = True
 
 
 # Global settings instance

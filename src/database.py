@@ -27,9 +27,9 @@ class DatabaseManager:
         Path(self.db_path).parent.mkdir(parents=True, exist_ok=True)
 
         # Initialize database
-        self._init_database()
+        self.init_database()
 
-    def _init_database(self):
+    def init_database(self):
         """Initialize database tables"""
         with self.get_connection() as conn:
             cursor = conn.cursor()
@@ -39,7 +39,7 @@ class DatabaseManager:
                 CREATE TABLE IF NOT EXISTS candidates (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     full_name TEXT NOT NULL,
-                    email TEXT UNIQUE,
+                    email TEXT,
                     phone TEXT,
                     address TEXT,
                     linkedin TEXT,
@@ -59,7 +59,6 @@ class DatabaseManager:
                     publications TEXT,  -- JSON string
                     created_at TEXT DEFAULT CURRENT_TIMESTAMP,
                     updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
-                    is_active BOOLEAN DEFAULT 1,
                     source_file TEXT
                 )
             """)
@@ -102,7 +101,6 @@ class DatabaseManager:
                     last_updated TEXT,
                     created_at TEXT DEFAULT CURRENT_TIMESTAMP,
                     updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
-                    is_active BOOLEAN DEFAULT 1,
                     source_file TEXT
                 )
             """)
@@ -126,7 +124,32 @@ class DatabaseManager:
             """)
 
             conn.commit()
+
+            self._reset_autoincrement_sequences(conn.cursor())
+
             logger.info("Database tables created successfully")
+
+    def _reset_autoincrement_sequences(self, cursor):
+        """Reset auto-increment sequences to start from the last existing ID in each table"""
+        tables = ["candidates", "job_descriptions", "candidate_job_matches"]
+
+        for table in tables:
+            try:
+                # Get the maximum ID from the table
+                cursor.execute(f"SELECT MAX(id) FROM {table}")
+                max_id = cursor.fetchone()[0]
+
+                if max_id is not None:
+                    # Update the sqlite_sequence table to set the next auto-increment value
+                    cursor.execute(
+                        "INSERT OR REPLACE INTO sqlite_sequence (name, seq) VALUES (?, ?)",
+                        (table, max_id),
+                    )
+                    logger.info(f"Reset auto-increment for {table} to start from {max_id + 1}")
+                else:
+                    logger.info(f"No existing data in {table}, auto-increment will start from 1")
+            except sqlite3.Error as e:
+                logger.warning(f"Could not reset auto-increment for {table}: {e}")
 
     @contextmanager
     def get_connection(self):
@@ -161,7 +184,7 @@ db_manager = DatabaseManager()
 
 def create_tables():
     """Create all database tables"""
-    db_manager._init_database()
+    db_manager.init_database()
 
 
 def get_db_connection():

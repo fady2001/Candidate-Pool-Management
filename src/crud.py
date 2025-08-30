@@ -94,7 +94,7 @@ class CandidateService:
 
             if candidate_id:
                 logger.info(f"Created candidate: {cv_data.full_name} (ID: {candidate_id})")
-                return CandidateService.get_candidate(candidate_id)
+                return CandidateService.get_candidate_by_id(candidate_id)
             return None
 
         except sqlite3.IntegrityError as e:
@@ -704,13 +704,3 @@ class MatchService:
         except Exception as e:
             logger.error(f"Failed to get matches for job {job_id}: {str(e)}")
             return []
-
-
-def initialize_database():
-    """Initialize database tables"""
-    try:
-        db_manager._init_database()
-        logger.info("Database initialized successfully")
-    except Exception as e:
-        logger.error(f"Failed to initialize database: {str(e)}")
-        raise

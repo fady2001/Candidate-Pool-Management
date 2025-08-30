@@ -5,6 +5,13 @@ from loguru import logger
 
 from src.batch_processor import BatchProcessor
 from src.config import settings
+from src.db_utils import (
+    save_candidate_to_database,
+    save_cv_batch_results_to_json,
+    save_job_batch_results_to_json,
+    save_job_description_to_database,
+)
+from src.models import BatchProcessingStats, CVBatchData, JobBatchData
 
 
 def cvs_main():
@@ -40,12 +47,24 @@ def cvs_main():
 
     # 3. Process the files in batches
     logger.info(f"Processing with batch size: {settings.BATCH_SIZE_CV}")
-    stats = batch_processor.process_cv_files(
+
+    function_results = batch_processor.process_cv_files(
         file_paths=cv_files,
         batch_size=4,
         max_size_mb=settings.MAX_FILE_SIZE_MB,
-        save_results=True,
     )
+    stats: BatchProcessingStats = function_results[0]
+    processed_cvs: List[CVBatchData] = function_results[1]
+
+    # 4. save result
+    if settings.SAVE_INTO_DB:
+        for batch in processed_cvs:
+            for file in batch.results:
+                save_candidate_to_database(file.cv_data, str(file.file_info.file_path))
+
+    if settings.SAVE_INTO_JSON:
+        for batch in processed_cvs:
+            save_cv_batch_results_to_json(batch, settings.PROCESSED_DATA_DIR)
 
     # Display results
     logger.info("Processing completed!")
@@ -60,7 +79,8 @@ def cvs_main():
         f"average file processing time: {stats.total_processing_time_seconds / stats.total_files:.2f} seconds"
     )
     logger.info(f"average_batch_size: {stats.average_batch_size:.2f}")
-    return stats
+
+    # Data has already been saved above in the batch processing loop
 
 
 def jd_main():
@@ -96,12 +116,24 @@ def jd_main():
 
     # 3. Process the files in batches
     logger.info(f"Processing with batch size: {settings.BATCH_SIZE_JOB}")
-    stats = batch_processor.process_job_files(
+    function_results = batch_processor.process_job_files(
         file_paths=job_files,
         batch_size=2,
         max_size_mb=settings.MAX_FILE_SIZE_MB,
-        save_results=True,
     )
+
+    stats: BatchProcessingStats = function_results[0]
+    processed_jds: List[JobBatchData] = function_results[1]
+
+    # 4. save result
+    if settings.SAVE_INTO_DB:
+        for batch in processed_jds:
+            for file in batch.results:
+                save_job_description_to_database(file.job_data, str(file.file_info.file_path))
+
+    if settings.SAVE_INTO_JSON:
+        for batch in processed_jds:
+            save_job_batch_results_to_json(batch, settings.PROCESSED_DATA_DIR)
 
     # Display results
     logger.info("Processing completed!")
@@ -120,4 +152,4 @@ def jd_main():
 
 
 if __name__ == "__main__":
-    cvs_main()
+    jd_main()

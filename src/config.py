@@ -11,6 +11,7 @@ class Settings(BaseModel):
     DATA_DIR: Path = PROJECT_ROOT / "data"
     RAW_DATA_DIR: Path = DATA_DIR / "raw"
     PROCESSED_DATA_DIR: Path = DATA_DIR / "processed"
+    INTERIM_DATA_DIR: Path = DATA_DIR / "interim"
     MODELS_DIR: Path = PROJECT_ROOT / "models"
     REPORTS_DIR: Path = PROJECT_ROOT / "reports"
     LOGS_DIR: Path = PROJECT_ROOT / "logs"
@@ -20,7 +21,7 @@ class Settings(BaseModel):
         "documents": [".pdf", ".docx", ".doc"],
         "all": [".png", ".jpg", ".jpeg", ".pdf", ".docx", ".doc"],
     }
-    CV_DIRECTORY: Path = RAW_DATA_DIR / "cvs"
+    CV_DIRECTORY: Path = INTERIM_DATA_DIR / "cvs"
     JOB_DESCRIPTIONS_DIR: Path = RAW_DATA_DIR / "Job Descriptions"
 
     # Batch processing configuration
@@ -47,6 +48,10 @@ class Settings(BaseModel):
     # Gemini model settings
     GEMINI_MODEL: str = "gemini-2.5-flash"
     GEMINI_TEMPERATURE: float = 0.1
+    
+    # saving cv or jd result
+    SAVE_INTO_JSON:bool = False
+    SAVE_INTO_DB:bool = True
 
 
 # Global settings instance

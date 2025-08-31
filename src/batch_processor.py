@@ -1,8 +1,7 @@
 from datetime import datetime
-import json
 from pathlib import Path
 import time
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from langchain_core.output_parsers import PydanticOutputParser
 from loguru import logger
@@ -45,9 +44,7 @@ class BatchProcessor:
         file_paths: List[Path],
         batch_size: Optional[int] = None,
         max_size_mb: Optional[int] = None,
-        save_results: bool = True,
-        output_dir: Optional[str] = None,
-    ) -> BatchProcessingStats:
+    ) -> Tuple[BatchProcessingStats,List[CVBatchData]]:
         """
         Process multiple CV files in batches
 
@@ -66,7 +63,6 @@ class BatchProcessor:
 
         batch_size = batch_size or settings.BATCH_SIZE_CV
         max_size_mb = max_size_mb or settings.MAX_FILE_SIZE_MB
-        output_dir = output_dir or settings.PROCESSED_DATA_DIR
 
         logger.info(f"Starting CV batch processing session: {session_id}")
         logger.info(f"Processing {len(file_paths)} files with batch size {batch_size}")
@@ -100,9 +96,6 @@ class BatchProcessor:
             total_successful += batch_result.successful_parses
             total_failed += batch_result.failed_parses
 
-            if save_results:
-                self._save_cv_batch_results(batch_result, output_dir)
-
             logger.info(
                 f"Batch {i} completed: {batch_result.successful_parses}/{batch_result.total_files} successful"
             )
@@ -128,16 +121,14 @@ class BatchProcessor:
             f"Overall success rate: {stats.success_rate:.1f}% ({total_successful}/{len(supported_files)})"
         )
 
-        return stats
+        return stats, all_batch_results
 
     def process_job_files(
         self,
         file_paths: List[Path],
         batch_size: Optional[int] = None,
         max_size_mb: Optional[int] = None,
-        save_results: bool = True,
-        output_dir: Optional[str] = None,
-    ) -> BatchProcessingStats:
+    ) -> Tuple[BatchProcessingStats,List[JobBatchData]]:
         """
         Process multiple job description files in batches
 
@@ -156,7 +147,6 @@ class BatchProcessor:
 
         batch_size = batch_size or settings.BATCH_SIZE_JOB
         max_size_mb = max_size_mb or settings.MAX_FILE_SIZE_MB
-        output_dir = output_dir or settings.PROCESSED_DATA_DIR
 
         logger.info(f"Starting Job batch processing session: {session_id}")
         logger.info(f"Processing {len(file_paths)} files with batch size {batch_size}")
@@ -189,9 +179,6 @@ class BatchProcessor:
             total_successful += batch_result.successful_parses
             total_failed += batch_result.failed_parses
 
-            if save_results:
-                self._save_job_batch_results(batch_result, output_dir)
-
             logger.info(
                 f"Batch {i} completed: {batch_result.successful_parses}/{batch_result.total_files} successful"
             )
@@ -217,7 +204,7 @@ class BatchProcessor:
             f"Overall success rate: {stats.success_rate:.1f}% ({total_successful}/{len(supported_files)})"
         )
 
-        return stats
+        return stats, all_batch_results
 
     def _process_cv_batch_with_retry(self, batch_files: List[Path]) -> CVBatchData:
         """Process a CV batch with retry logic"""
@@ -264,38 +251,6 @@ class BatchProcessor:
         return self.job_gemini_parser._create_empty_job_batch_result(
             "failed_batch", len(batch_files), time.time(), str(last_exception)
         )
-
-    def _save_cv_batch_results(self, batch_result: CVBatchData, output_dir: str):
-        """Save CV batch results to files"""
-        output_path = Path(output_dir)
-        output_path.mkdir(parents=True, exist_ok=True)
-
-        batch_summary_file = output_path / f"cv_batch_{batch_result.batch_id}_summary.json"
-        with open(batch_summary_file, "w", encoding="utf-8") as f:
-            json.dump(batch_result.dict(), f, indent=2, ensure_ascii=False)
-
-        for result in batch_result.results:
-            if result.success and result.cv_data:
-                cv_filename = Path(result.file_info.file_name).stem
-                cv_output_file = output_path / f"parsed_{cv_filename}.json"
-                with open(cv_output_file, "w", encoding="utf-8") as f:
-                    json.dump(result.cv_data.dict(), f, indent=2, ensure_ascii=False)
-
-    def _save_job_batch_results(self, batch_result: JobBatchData, output_dir: str):
-        """Save Job batch results to files"""
-        output_path = Path(output_dir)
-        output_path.mkdir(parents=True, exist_ok=True)
-
-        batch_summary_file = output_path / f"job_batch_{batch_result.batch_id}_summary.json"
-        with open(batch_summary_file, "w", encoding="utf-8") as f:
-            json.dump(batch_result.dict(), f, indent=2, ensure_ascii=False)
-
-        for result in batch_result.results:
-            if result.success and result.job_data:
-                job_filename = Path(result.file_info.file_name).stem
-                job_output_file = output_path / f"parsed_{job_filename}.json"
-                with open(job_output_file, "w", encoding="utf-8") as f:
-                    json.dump(result.job_data.dict(), f, indent=2, ensure_ascii=False)
 
     def _create_empty_stats(
         self, session_id: str, start_time: float, file_type: str

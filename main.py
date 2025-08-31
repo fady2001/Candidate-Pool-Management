@@ -1,7 +1,9 @@
 from pathlib import Path
+import sys
 from typing import List
 
 from loguru import logger
+import uvicorn
 
 from src.batch_processor import BatchProcessor
 from src.config import settings
@@ -151,5 +153,25 @@ def jds_main():
     return stats
 
 
+def api_main():
+    """
+    |---------------------------------------------------------------------------|
+    |                           Run the FastAPI server                          |
+    |---------------------------------------------------------------------------|
+    """
+    logger.info("Starting Candidate Pool Management API...")
+    logger.info("API will be available at: http://localhost:8000")
+    logger.info("API documentation will be available at: http://localhost:8000/docs")
+
+    try:
+        uvicorn.run(
+            "api:app", host="0.0.0.0", port=8000, reload=True, log_level="info", access_log=True
+        )
+    except KeyboardInterrupt:
+        logger.info("API server stopped by user")
+    except Exception as e:
+        logger.error(f"Error starting API server: {str(e)}")
+        sys.exit(1)
+
 if __name__ == "__main__":
-    jds_main()
+    api_main()

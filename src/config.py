@@ -32,7 +32,7 @@ class Settings(BaseModel):
     BATCH_DELAY_SECONDS: float = 1.0
 
     # Database configuration
-    DATABASE_NAME: str = "candidate_pool.db"
+    DATABASE_NAME: str = "perfect_candidate_pool.db"
     DATABASE_DIR: str = f"{DATA_DIR}/{DATABASE_NAME}"
     DATABASE_URL: str = f"sqlite:///{DATABASE_DIR}"
     DATABASE_TIMEOUT: int = 30

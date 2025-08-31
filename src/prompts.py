@@ -57,6 +57,21 @@ For EACH educational entry:
 - **GPA**: If mentioned, extract with scale (e.g., "3.8/4.0")
 - **Additional Details**: Honors, relevant coursework, thesis topics
 
+**Education Normalization Rules**:
+- **Degree Standardization**: Always use full degree names for example:
+  - "BS" or "B.S." -> "Bachelor of Science"
+  - "BA" or "B.A." -> "Bachelor of Arts"
+  - "MS" or "M.S." -> "Master of Science"
+  - "MA" or "M.A." -> "Master of Arts"
+  - "MBA" -> "Master of Business Administration"
+  - "PhD" or "Ph.D." -> "Doctor of Philosophy"
+  - "MD" -> "Doctor of Medicine"
+  - "JD" -> "Juris Doctor"
+  - "BSc" -> "Bachelor of Science"
+  - "MSc" -> "Master of Science"
+  - "BEng" -> "Bachelor of Engineering"
+  - "MEng" -> "Master of Engineering"
+
 ### 5. SKILLS ANALYSIS (Priority: Critical)
 Categorize skills into logical groups:
 - **Technical Skills**: Programming languages, software, tools, frameworks
@@ -71,6 +86,21 @@ Categorize skills into logical groups:
 - If technology family given (e.g., "cloud platforms: AWS/Azure/GCP"), create separate skill entries for each named platform
 - If a CV skill lists a version (e.g., "Python 3.10"), keep the base skill name "Python"; version can be ignored
 - Ensure no duplicate skill names after canonicalization
+- **Acronym Expansion**: Always include both full terms and acronyms for technical concepts for example:
+  - "LLM" or "Large Language Model" -> "Large Language Model (LLM)"
+  - "ML" or "Machine Learning" -> "Machine Learning (ML)"
+  - "AI" or "Artificial Intelligence" -> "Artificial Intelligence (AI)"
+  - "NLP" or "Natural Language Processing" -> "Natural Language Processing (NLP)"
+  - "API" or "Application Programming Interface" -> "Application Programming Interface (API)"
+  - "REST" or "Representational State Transfer" -> "Representational State Transfer (REST)"
+  - "SQL" or "Structured Query Language" -> "Structured Query Language (SQL)"
+  - "NoSQL" or "Not Only SQL" -> "Not Only SQL (NoSQL)"
+  - "CI/CD" or "Continuous Integration/Continuous Deployment" -> "Continuous Integration/Continuous Deployment (CI/CD)"
+  - "ETL" or "Extract, Transform, Load" -> "Extract, Transform, Load (ETL)"
+  - "AWS" or "Amazon Web Services" -> "Amazon Web Services (AWS)"
+  - "GCP" or "Google Cloud Platform" -> "Google Cloud Platform (GCP)"
+  - "IoT" or "Internet of Things" -> "Internet of Things (IoT)"
+  - "UI/UX" or "User Interface/User Experience" -> "User Interface/User Experience (UI/UX)"
 
 ### 6. CERTIFICATIONS & LICENSES (Priority: High)
 For EACH certification:
@@ -252,6 +282,36 @@ Categorize skills into logical groups with clear distinction between required an
 - Merge synonyms and variants ("JS" -> "JavaScript", "AWS" -> "Amazon Web Services")
 - Separate technology families into individual skills
 - Remove duplicates while preserving the most complete form
+- **Acronym Expansion**: Always include both full terms and acronyms for technical concepts for example:
+  - "LLM" or "Large Language Model" -> "Large Language Model (LLM)"
+  - "ML" or "Machine Learning" -> "Machine Learning (ML)"
+  - "AI" or "Artificial Intelligence" -> "Artificial Intelligence (AI)"
+  - "NLP" or "Natural Language Processing" -> "Natural Language Processing (NLP)"
+  - "API" or "Application Programming Interface" -> "Application Programming Interface (API)"
+  - "REST" or "Representational State Transfer" -> "Representational State Transfer (REST)"
+  - "SQL" or "Structured Query Language" -> "Structured Query Language (SQL)"
+  - "NoSQL" or "Not Only SQL" -> "Not Only SQL (NoSQL)"
+  - "CI/CD" or "Continuous Integration/Continuous Deployment" -> "Continuous Integration/Continuous Deployment (CI/CD)"
+  - "ETL" or "Extract, Transform, Load" -> "Extract, Transform, Load (ETL)"
+  - "AWS" or "Amazon Web Services" -> "Amazon Web Services (AWS)"
+  - "GCP" or "Google Cloud Platform" -> "Google Cloud Platform (GCP)"
+  - "IoT" or "Internet of Things" -> "Internet of Things (IoT)"
+  - "UI/UX" or "User Interface/User Experience" -> "User Interface/User Experience (UI/UX)"
+
+### Education Normalization:
+- **Degree Standardization**: Always use full degree names for example:
+  - "BS" or "B.S." -> "Bachelor of Science"
+  - "BA" or "B.A." -> "Bachelor of Arts"
+  - "MS" or "M.S." -> "Master of Science"
+  - "MA" or "M.A." -> "Master of Arts"
+  - "MBA" -> "Master of Business Administration"
+  - "PhD" or "Ph.D." -> "Doctor of Philosophy"
+  - "MD" -> "Doctor of Medicine"
+  - "JD" -> "Juris Doctor"
+  - "BSc" -> "Bachelor of Science"
+  - "MSc" -> "Master of Science"
+  - "BEng" -> "Bachelor of Engineering"
+  - "MEng" -> "Master of Engineering"
 
 ### Experience Level Mapping:
 - Map years to standard ranges: 0-2 (Entry-level), 3-5 (Mid-level), 6-10 (Senior), 10+ (Executive)

@@ -6,7 +6,7 @@ from typing import List, Tuple
 import uuid
 
 from dotenv import load_dotenv
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 from loguru import logger
 
 from src.config import settings
@@ -22,6 +22,12 @@ def get_llm(model="gemini-2.5-flash", temperature=0.1) -> ChatGoogleGenerativeAI
     )
     logger.info(f"Initialized LLM with model: {model}")
     return llm
+
+def get_embedding_model(model='models/embedding-001') -> GoogleGenerativeAIEmbeddings:
+    load_dotenv()
+    GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+    embedding_model = GoogleGenerativeAIEmbeddings(model=model,google_api_key=GOOGLE_API_KEY)
+    return embedding_model
 
 
 def encode_file_to_base64(file_path: str) -> str:

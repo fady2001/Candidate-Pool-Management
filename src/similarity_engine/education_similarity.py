@@ -13,8 +13,8 @@ class EducationSimilarityMetric(BaseSimilarityMetric):
     def calculate(self, candidate: Dict, job_context: JobContext) -> float:
         """Calculate education similarity using cached job requirements"""
         try:
-            candidate_education = candidate.get("education", []) or []
-            job_education_requirements = job_context.education_requirements
+            candidate_education = self._create_candidate_education_text(candidate.get("education", []) or [])
+            job_education_requirements = " ".join(job_context.education_requirements)
 
             if not job_education_requirements:
                 return 0.8
@@ -22,38 +22,31 @@ class EducationSimilarityMetric(BaseSimilarityMetric):
             if not candidate_education:
                 return 0.0
 
-            candidate_degrees = []
-            candidate_fields = []
-
-            for edu in candidate_education:
-                if isinstance(edu, dict):
-                    degree = edu.get("degree", "")
-                    field = edu.get("field_of_study", "")
-                    if degree:
-                        candidate_degrees.append(degree.lower())
-                    if field:
-                        candidate_fields.append(field.lower())
-
-            education_score = 0.0
-            total_requirements = len(job_education_requirements)
-
-            for requirement in job_education_requirements:
-                req_lower = requirement.lower()
-                degree_match = any(
-                    SM(None, req_lower, deg).ratio() > 0.7 for deg in candidate_degrees
-                )
-                field_match = any(
-                    SM(None, req_lower, field).ratio() > 0.7 for field in candidate_fields
-                )
-
-                if degree_match or field_match:
-                    education_score += 1.0
-
-            return education_score / max(total_requirements, 1)
-
+            return SM(None, candidate_education, job_education_requirements).ratio()
+            
         except Exception as e:
             logger.error(f"Error calculating education similarity: {e}")
             return 0.0
+
+    def _create_candidate_education_text(self, candidate_education: List) -> str:
+        """Create a text representation of candidate education for embedding"""
+        education_parts = []
+
+        for edu in candidate_education:
+            if isinstance(edu, dict):
+                degree = edu.get("degree", "")
+                field = edu.get("field_of_study", "")
+
+                edu_text_parts = []
+                if degree:
+                    edu_text_parts.append(f"Degree: {degree}")
+                if field:
+                    edu_text_parts.append(f"Field: {field}")
+
+                if edu_text_parts:
+                    education_parts.append(". ".join(edu_text_parts))
+
+        return ". ".join(education_parts)
 
     @staticmethod
     def extract_job_education_requirements(job: Dict) -> List[str]:

@@ -136,6 +136,7 @@ class AdvancedSimilarityEngine:
             + language_score * weights["language"]
             + certification_score * weights["certification"]
         )
+        overall_score /= sum(weights.values())
 
         return SimilarityScore(
             overall_score=round(overall_score, 4),

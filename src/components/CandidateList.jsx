@@ -283,8 +283,8 @@ export default function CandidateList() {
         headerName: "Name",
         width: 180,
         renderCell: (params) => (
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <PersonIcon fontSize="small" color="action" />
+          <Box sx={{ display: "flex", alignItems: "start", gap: 1 }}>
+            <PersonIcon fontSize="small" color="action" sx={{marginTop:'15px'}}/>
             <Box>
               <Box sx={{ fontWeight: "medium" }}>{params.value}</Box>
               {params.row.email && (

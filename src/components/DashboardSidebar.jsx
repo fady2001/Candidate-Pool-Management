@@ -30,7 +30,7 @@ function DashboardSidebar({
 
   const { pathname } = useLocation();
 
-  const [expandedItemIds, setExpandedItemIds] = React.useState([]);
+  const [, setExpandedItemIds] = React.useState([]);
 
   const isOverSmViewport = useMediaQuery(theme.breakpoints.up("sm"));
   const isOverMdViewport = useMediaQuery(theme.breakpoints.up("md"));
@@ -152,7 +152,7 @@ function DashboardSidebar({
         </Box>
       </React.Fragment>
     ),
-    [mini, hasDrawerTransitions, isFullyExpanded, expandedItemIds, pathname]
+    [mini, hasDrawerTransitions, isFullyExpanded, pathname]
   );
 
   const getDrawerSharedSx = React.useCallback(

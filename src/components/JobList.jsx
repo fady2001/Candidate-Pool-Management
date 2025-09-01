@@ -214,7 +214,7 @@ export default function JobList() {
     const { jobTitle, company, department } = params.row;
     return (
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-        <WorkIcon fontSize="small" color="action" />
+        <WorkIcon fontSize="small" color="action" sx={{ marginTop: "15px" }} />
         <Box>
           <Box sx={{ fontWeight: "medium" }}>{jobTitle}</Box>
           <Box sx={{ fontSize: "0.75rem", color: "text.secondary" }}>
@@ -252,7 +252,11 @@ export default function JobList() {
         width: 150,
         renderCell: (params) => (
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <LocationOnIcon fontSize="small" color="action" />
+            <LocationOnIcon
+              fontSize="small"
+              color="action"
+              sx={{ marginTop: "15px" }}
+            />
             {params.value}
           </Box>
         ),
@@ -327,7 +331,11 @@ export default function JobList() {
         renderCell: (params) => (
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             {params.value !== "N/A" && (
-              <AttachMoneyIcon fontSize="small" color="action" />
+              <AttachMoneyIcon
+                fontSize="small"
+                color="action"
+                sx={{ marginTop: "15px" }}
+              />
             )}
             <Tooltip title={params.value} placement="top">
               <Box

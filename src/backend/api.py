@@ -6,8 +6,8 @@ from loguru import logger
 from pydantic import BaseModel
 import uvicorn
 
-from src.crud import CandidateService, JobService
-from src.similarity_engine import AdvancedSimilarityEngine
+from src.backend.crud import CandidateService, JobService
+from src.backend.similarity_engine import AdvancedSimilarityEngine
 
 
 class MatchResponse(BaseModel):
@@ -77,7 +77,7 @@ async def get_all_candidates(
         if not candidates:
             logger.info("No candidates found")
             return []
-        
+
         logger.info(f"Retrieved {len(candidates)} candidates")
         return candidates
 
@@ -194,10 +194,8 @@ async def get_matching_candidates_for_job(
                 status_code=404, detail=f"Job description with ID {job_id} not found"
             )
 
-        all_candidates = CandidateService.get_candidates(
-            skip=0, limit=1000
-        ) 
-        
+        all_candidates = CandidateService.get_candidates(skip=0, limit=1000)
+
         if not all_candidates:
             logger.info("No candidates found in database")
             return []

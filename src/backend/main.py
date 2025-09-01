@@ -152,5 +152,5 @@ def jds_main():
 
 
 if __name__ == "__main__":
-    cvs_main()
-    # jds_main()
+    # cvs_main()
+    jds_main()

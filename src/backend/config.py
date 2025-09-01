@@ -7,7 +7,7 @@ from pydantic import BaseModel
 
 
 class Settings(BaseModel):
-    PROJECT_ROOT: Path = Path(__file__).parent.parent
+    PROJECT_ROOT: Path = Path(__file__).parent.parent.parent
     DATA_DIR: Path = PROJECT_ROOT / "data"
     RAW_DATA_DIR: Path = DATA_DIR / "raw"
     PROCESSED_DATA_DIR: Path = DATA_DIR / "processed"
@@ -48,10 +48,10 @@ class Settings(BaseModel):
     # Gemini model settings
     GEMINI_MODEL: str = "gemini-2.5-flash"
     GEMINI_TEMPERATURE: float = 0.1
-    
+
     # saving cv or jd result
-    SAVE_INTO_JSON:bool = False
-    SAVE_INTO_DB:bool = True
+    SAVE_INTO_JSON: bool = False
+    SAVE_INTO_DB: bool = True
 
 
 # Global settings instance

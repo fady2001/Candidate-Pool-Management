@@ -2,16 +2,16 @@ from typing import Dict, List, Optional
 
 from loguru import logger
 
-from src.crud import CandidateService, JobService
-from src.similarity_engine.certification_similarity import CertificationSimilarityMetric
-from src.similarity_engine.data_models import JobContext, SimilarityScore
-from src.similarity_engine.education_similarity import EducationSimilarityMetric
-from src.similarity_engine.experience_similarity import ExperienceSimilarityMetric
-from src.similarity_engine.language_similarity import LanguageSimilarityMetric
-from src.similarity_engine.semantic_similarity import SemanticSimilarityMetric
-from src.similarity_engine.seniority_similarity import SenioritySimilarityMetric
-from src.similarity_engine.skills_similarity import SkillsSimilarityMetric
-from src.utils import get_embedding_model
+from src.backend.crud import CandidateService, JobService
+from src.backend.similarity_engine.certification_similarity import CertificationSimilarityMetric
+from src.backend.similarity_engine.data_models import JobContext, SimilarityScore
+from src.backend.similarity_engine.education_similarity import EducationSimilarityMetric
+from src.backend.similarity_engine.experience_similarity import ExperienceSimilarityMetric
+from src.backend.similarity_engine.language_similarity import LanguageSimilarityMetric
+from src.backend.similarity_engine.semantic_similarity import SemanticSimilarityMetric
+from src.backend.similarity_engine.seniority_similarity import SenioritySimilarityMetric
+from src.backend.similarity_engine.skills_similarity import SkillsSimilarityMetric
+from src.backend.utils import get_embedding_model
 
 
 class AdvancedSimilarityEngine:

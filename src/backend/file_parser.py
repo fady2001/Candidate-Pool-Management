@@ -6,8 +6,8 @@ from langchain_core.output_parsers import PydanticOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from loguru import logger
 
-from src.config import settings
-from src.models import (
+from src.backend.config import settings
+from src.backend.models import (
     CVBatchData,
     CVBatchResponse,
     CVBatchResult,
@@ -16,8 +16,8 @@ from src.models import (
     JobBatchResponse,
     JobBatchResult,
 )
-from src.prompts import CV_PARSING_SYSTEM_PROMPT, JOB_DESCRIPTION_PARSING_SYSTEM_PROMPT
-from src.utils import (
+from src.backend.prompts import CV_PARSING_SYSTEM_PROMPT, JOB_DESCRIPTION_PARSING_SYSTEM_PROMPT
+from src.backend.utils import (
     create_file_info,
     generate_batch_id,
     get_llm,

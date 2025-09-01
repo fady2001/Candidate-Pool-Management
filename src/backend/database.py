@@ -9,7 +9,7 @@ from typing import Optional
 
 from loguru import logger
 
-from src.config import settings
+from src.backend.config import settings
 
 
 class DatabaseManager:

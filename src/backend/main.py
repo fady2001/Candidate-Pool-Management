@@ -1,19 +1,17 @@
 from pathlib import Path
-import sys
 from typing import List
 
 from loguru import logger
-import uvicorn
 
-from src.batch_processor import BatchProcessor
-from src.config import settings
-from src.db_utils import (
+from src.backend.batch_processor import BatchProcessor
+from src.backend.config import settings
+from src.backend.db_utils import (
     save_candidate_to_database,
     save_cv_batch_results_to_json,
     save_job_batch_results_to_json,
     save_job_description_to_database,
 )
-from src.models import BatchProcessingStats, CVBatchData, JobBatchData
+from src.backend.models import BatchProcessingStats, CVBatchData, JobBatchData
 
 
 def cvs_main():
@@ -151,3 +149,8 @@ def jds_main():
     )
     logger.info(f"average_batch_size: {stats.average_batch_size:.2f}")
     return stats
+
+
+if __name__ == "__main__":
+    cvs_main()
+    # jds_main()

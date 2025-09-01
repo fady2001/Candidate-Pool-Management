@@ -3,8 +3,8 @@ from typing import Dict, List, Set
 
 from loguru import logger
 
-from src.similarity_engine.base_similarity_metric import BaseSimilarityMetric
-from src.similarity_engine.data_models import JobContext
+from src.backend.similarity_engine.base_similarity_metric import BaseSimilarityMetric
+from src.backend.similarity_engine.data_models import JobContext
 
 
 class SkillsSimilarityMetric(BaseSimilarityMetric):

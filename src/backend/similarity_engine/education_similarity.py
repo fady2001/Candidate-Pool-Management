@@ -3,8 +3,8 @@ from typing import Dict, List
 
 from loguru import logger
 
-from src.similarity_engine.base_similarity_metric import BaseSimilarityMetric
-from src.similarity_engine.data_models import JobContext
+from src.backend.similarity_engine.base_similarity_metric import BaseSimilarityMetric
+from src.backend.similarity_engine.data_models import JobContext
 
 
 class EducationSimilarityMetric(BaseSimilarityMetric):
@@ -13,7 +13,9 @@ class EducationSimilarityMetric(BaseSimilarityMetric):
     def calculate(self, candidate: Dict, job_context: JobContext) -> float:
         """Calculate education similarity using cached job requirements"""
         try:
-            candidate_education = self._create_candidate_education_text(candidate.get("education", []) or [])
+            candidate_education = self._create_candidate_education_text(
+                candidate.get("education", []) or []
+            )
             job_education_requirements = " ".join(job_context.education_requirements)
 
             if not job_education_requirements:
@@ -23,7 +25,7 @@ class EducationSimilarityMetric(BaseSimilarityMetric):
                 return 0.0
 
             return SM(None, candidate_education, job_education_requirements).ratio()
-            
+
         except Exception as e:
             logger.error(f"Error calculating education similarity: {e}")
             return 0.0

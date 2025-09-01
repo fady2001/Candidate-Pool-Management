@@ -9,8 +9,8 @@ from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 from loguru import logger
 
-from src.config import settings
-from src.models import FileInfo
+from src.backend.config import settings
+from src.backend.models import FileInfo
 
 
 def get_llm(model="gemini-2.5-flash", temperature=0.1) -> ChatGoogleGenerativeAI:
@@ -23,10 +23,11 @@ def get_llm(model="gemini-2.5-flash", temperature=0.1) -> ChatGoogleGenerativeAI
     logger.info(f"Initialized LLM with model: {model}")
     return llm
 
-def get_embedding_model(model='models/embedding-001') -> GoogleGenerativeAIEmbeddings:
+
+def get_embedding_model(model="models/embedding-001") -> GoogleGenerativeAIEmbeddings:
     load_dotenv()
     GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-    embedding_model = GoogleGenerativeAIEmbeddings(model=model,google_api_key=GOOGLE_API_KEY)
+    embedding_model = GoogleGenerativeAIEmbeddings(model=model, google_api_key=GOOGLE_API_KEY)
     return embedding_model
 
 

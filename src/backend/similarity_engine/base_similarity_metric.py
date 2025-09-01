@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Dict
 
-from src.similarity_engine.data_models import JobContext
+from src.backend.similarity_engine.data_models import JobContext
 
 
 class BaseSimilarityMetric(ABC):

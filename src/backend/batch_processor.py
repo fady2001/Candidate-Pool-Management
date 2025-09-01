@@ -6,16 +6,16 @@ from typing import List, Optional, Tuple
 from langchain_core.output_parsers import PydanticOutputParser
 from loguru import logger
 
-from src.config import settings
-from src.file_parser import GeminiParser
-from src.models import (
+from src.backend.config import settings
+from src.backend.file_parser import GeminiParser
+from src.backend.models import (
     BatchProcessingStats,
     CVBatchData,
     CVData,
     JobBatchData,
     JobData,
 )
-from src.utils import (
+from src.backend.utils import (
     calculate_success_rate,
     create_batches,
     filter_supported_files,
@@ -44,7 +44,7 @@ class BatchProcessor:
         file_paths: List[Path],
         batch_size: Optional[int] = None,
         max_size_mb: Optional[int] = None,
-    ) -> Tuple[BatchProcessingStats,List[CVBatchData]]:
+    ) -> Tuple[BatchProcessingStats, List[CVBatchData]]:
         """
         Process multiple CV files in batches
 
@@ -128,7 +128,7 @@ class BatchProcessor:
         file_paths: List[Path],
         batch_size: Optional[int] = None,
         max_size_mb: Optional[int] = None,
-    ) -> Tuple[BatchProcessingStats,List[JobBatchData]]:
+    ) -> Tuple[BatchProcessingStats, List[JobBatchData]]:
         """
         Process multiple job description files in batches
 

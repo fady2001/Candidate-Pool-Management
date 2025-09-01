@@ -1,14 +1,13 @@
-
-
-'''
+"""
 |----------------------------------------------------------|
 |               similarity score calculation               |
 |----------------------------------------------------------|
-'''
+"""
+
 from typing import Any, Dict, List, Optional
 
 from langchain_core.vectorstores import InMemoryVectorStore
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class SimilarityScore(BaseModel):
@@ -21,7 +20,8 @@ class SimilarityScore(BaseModel):
     semantic_similarity: float
     seniority_match: float
     detailed_breakdown: Dict[str, Any]
-    
+
+
 class RequirementMatch(BaseModel):
     """Individual requirement matching result"""
 
@@ -30,9 +30,12 @@ class RequirementMatch(BaseModel):
     match_score: float
     match_type: str
     confidence: float
-    
+
+
 class JobContext(BaseModel):
     """Cached job context for efficient comparison with multiple candidates"""
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     job_id: int
     job_data: Dict

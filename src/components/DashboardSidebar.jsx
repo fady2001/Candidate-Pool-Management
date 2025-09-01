@@ -11,6 +11,8 @@ import PersonIcon from "@mui/icons-material/Person";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import DescriptionIcon from "@mui/icons-material/Description";
 import LayersIcon from "@mui/icons-material/Layers";
+import WorkIcon from "@mui/icons-material/Work";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { matchPath, useLocation } from "react-router";
 import DashboardSidebarContext from "../context/DashboardSidebarContext";
 import { DRAWER_WIDTH, MINI_DRAWER_WIDTH } from "../../constants";
@@ -128,13 +130,27 @@ function DashboardSidebar({
           >
             <DashboardSidebarHeaderItem>Main items</DashboardSidebarHeaderItem>
             <DashboardSidebarPageItem
-              id="employees"
-              title="Employees"
+              id="candidates"
+              title="Candidates"
               icon={<PersonIcon />}
-              href="/employees"
+              href="/candidates"
               selected={
-                !!matchPath("/employees/*", pathname) || pathname === "/"
+                !!matchPath("/candidates/*", pathname) || pathname === "/"
               }
+            />
+            <DashboardSidebarPageItem
+              id="jobs"
+              title="Job Descriptions"
+              icon={<WorkIcon />}
+              href="/jobs"
+              selected={!!matchPath("/jobs/*", pathname)}
+            />
+            <DashboardSidebarPageItem
+              id="matching"
+              title="Job Matching"
+              icon={<TrendingUpIcon />}
+              href="/matching"
+              selected={!!matchPath("/matching", pathname)}
             />
             <DashboardSidebarDividerItem />
             <DashboardSidebarHeaderItem>

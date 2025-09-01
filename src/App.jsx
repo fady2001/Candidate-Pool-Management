@@ -5,9 +5,9 @@ import DashboardLayout from "./components/DashboardLayout";
 import CandidateList from "./components/CandidateList";
 import JobList from "./components/JobList";
 import JobCandidateMatching from "./components/JobCandidateMatching";
-import EmployeeShow from "./components/EmployeeShow";
-import EmployeeCreate from "./components/EmployeeCreate";
-import EmployeeEdit from "./components/EmployeeEdit";
+import CandidateShow from "./components/CandidateShow";
+import CandidateCreate from "./components/CandidateCreate";
+import CandidateEdit from "./components/CandidateEdit";
 import NotificationsProvider from "./hooks/useNotifications/NotificationsProvider";
 import DialogsProvider from "./hooks/useDialogs/DialogsProvider";
 import AppTheme from "./theme/AppTheme";
@@ -28,54 +28,25 @@ const router = createHashRouter([
       },
       {
         path: "/candidates/:candidateId",
-        Component: EmployeeShow, // TODO: Update to CandidateShow
+        Component: CandidateShow,
       },
       {
         path: "/candidates/new",
-        Component: EmployeeCreate, // TODO: Update to CandidateCreate
+        Component: CandidateCreate,
       },
       {
         path: "/candidates/:candidateId/edit",
-        Component: EmployeeEdit, // TODO: Update to CandidateEdit
+        Component: CandidateEdit,
       },
       // Job routes
       {
         path: "/jobs",
         Component: JobList,
       },
-      {
-        path: "/jobs/:jobId",
-        Component: EmployeeShow, // TODO: Create JobShow component
-      },
-      {
-        path: "/jobs/new",
-        Component: EmployeeCreate, // TODO: Create JobCreate component
-      },
-      {
-        path: "/jobs/:jobId/edit",
-        Component: EmployeeEdit, // TODO: Create JobEdit component
-      },
       // Job-Candidate Matching route
       {
         path: "/matching",
         Component: JobCandidateMatching,
-      },
-      // Keep old employee routes for backward compatibility
-      {
-        path: "/employees",
-        Component: CandidateList,
-      },
-      {
-        path: "/employees/:employeeId",
-        Component: EmployeeShow,
-      },
-      {
-        path: "/employees/new",
-        Component: EmployeeCreate,
-      },
-      {
-        path: "/employees/:employeeId/edit",
-        Component: EmployeeEdit,
       },
       // Fallback route
       {
